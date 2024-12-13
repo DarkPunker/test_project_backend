@@ -1,0 +1,10 @@
+fastapi
+redis
+types-redis
+uvicorn
+sqlalchemy
+psycopg2
+python-dotenv
+pydantic
+sqlmodel
+gunicorn
