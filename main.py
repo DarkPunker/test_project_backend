@@ -2,19 +2,19 @@
 import config
 from fastapi import FastAPI
 
-from router import producto_router#, categoria_router, tienda_router, comentario_router, cliente_router
+from router import producto_router, tienda_router,cliente_router#, categoria_router,  comentario_router, 
 
 app = FastAPI()
 
 # Initialize the database
-#init_db()
+
 
 # Include routers for each endpoint
 app.include_router(producto_router.router)
 # app.include_router(categoria_router.router)
-# app.include_router(tienda_router.router)
+app.include_router(tienda_router.router)
 # app.include_router(comentario_router.router)
-# app.include_router(cliente_router.router)
+app.include_router(cliente_router.router)
 
 @app.get("/")
 def root():
