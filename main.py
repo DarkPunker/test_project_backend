@@ -1,10 +1,8 @@
 # main.py
-from fastapi import FastAPI
 import config
-from model.database import init_db
+from fastapi import FastAPI
 
-from .model.database import init_db
-from .router import producto_router #categoria_router, tienda_router, comentario_router, cliente_router
+from router import producto_router#, categoria_router, tienda_router, comentario_router, cliente_router
 
 app = FastAPI()
 
@@ -12,7 +10,7 @@ app = FastAPI()
 #init_db()
 
 # Include routers for each endpoint
-#app.include_router(producto_router.router)
+app.include_router(producto_router.router)
 # app.include_router(categoria_router.router)
 # app.include_router(tienda_router.router)
 # app.include_router(comentario_router.router)

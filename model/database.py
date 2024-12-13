@@ -1,16 +1,22 @@
-from sqlmodel import SQLModel, create_engine, Session
-import os
-from dotenv import load_dotenv
+from sqlmodel import create_engine
+from os import getenv
+from sqlmodel import Session
+from contextlib import contextmanager
 
-load_dotenv()
+DB_URL = getenv("DB_URL", '')
 
-DATABASE_URL = os.getenv("DATABASE_URL")
-engine = create_engine(DATABASE_URL, echo=True)
+engine = create_engine(
+                        DB_URL, 
+                        echo=True,
+                        pool_size=10,           # Número de conexiones persistentes en el pool
+                        max_overflow=20,        # Número máximo de conexiones adicionales que pueden crearse
+                        pool_timeout=60         # Tiempo de espera en segundos para obtener una conexión antes de lanzar TimeoutError  
+                    )
 
-def init_db():
-    SQLModel.metadata.create_all(engine)
-
+@contextmanager
 def get_session():
-    with Session(engine) as session:
+    session = Session(engine)
+    try:
         yield session
-print("DATABASE_URL:", DATABASE_URL)
+    finally:
+       session.close()
