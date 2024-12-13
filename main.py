@@ -1,5 +1,6 @@
 # main.py
 from fastapi import FastAPI
+import config
 from model.database import init_db
 
 from .model.database import init_db
