@@ -1,5 +1,6 @@
 from sqlmodel import Session, select
-from model.models import CamposDeFormularios
+from model.librerias_model import CamposDeFormularios
+from model.librerias_model import Librerias
 from model.database import get_session
 
 class campos_de_formularios_repository():
@@ -14,3 +15,19 @@ class campos_de_formularios_repository():
         session.commit()
         session.refresh(campos_de_formularios)
         return campos_de_formularios
+    
+    
+class librerias_repository:
+
+    def __init__(self):
+        pass
+
+    def get_librerias(self):
+        with get_session() as session:
+            return session.exec(select(Librerias)).all()
+
+    def create_librerias(self, session: Session, librerias: Librerias):
+        session.add(librerias)
+        session.commit()
+        session.refresh(librerias)
+        return librerias

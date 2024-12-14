@@ -1,5 +1,5 @@
 from sqlmodel import Session, select
-from model.models import Cliente
+from model.cliente_model import Cliente
 from model.database import get_session
 
 class Cliente_repository():

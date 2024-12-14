@@ -1,13 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
-from model.producto_model import Producto
-from services.producto_service import get_productos
+from model.cometario_model import Comentario
+from services.comentario_service import get_comentario
 
-router = APIRouter(prefix="/productos", tags=["Productos"])
+router = APIRouter(prefix="/comentario", tags=["Comentario"])
 
 @router.get("/")
-def read_productos():
-    return get_productos()
+def read_comentario():
+    return get_comentario()
 
 # @router.post("/")
 # def add_producto(producto: Producto, session: Session = Depends(get_session)):

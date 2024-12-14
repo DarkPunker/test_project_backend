@@ -1,5 +1,5 @@
 from sqlmodel import Session, select
-from model.models import Producto
+from model.producto_model import Producto
 from model.database import get_session
 
 class Producto_repository():
