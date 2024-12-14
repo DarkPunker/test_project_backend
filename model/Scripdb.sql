@@ -1,4 +1,3 @@
-
 CREATE TABLE public."categoria" (
     "id_categoria" integer NOT NULL,
     "nombre" text NOT NULL,
@@ -73,38 +72,6 @@ CREATE TABLE public."librerias" (
  
 ALTER TABLE public."librerias" OWNER TO postgres;
 
-COPY public."categoria" ("id_categoria", "nombre", "id_tienda") FROM stdin;
-1	Electronica	1
-2	Ropa	2
-3	Accesorios	2
-\.
-
-
-COPY public."cliente" ("cc", "nombre", "apellido") FROM stdin;
-101	Carlos	Pérez
-102	Ana	García
-103	Luis	Martínez
-\.
-
-
-COPY public."comentario" (id, "coment", "cc_cliente") FROM stdin;
-\.
-
-
-COPY public."producto" ("id", "nombre", "característica", "descripción ", "precio", "stock", "id_categoria", "id_comentario") FROM stdin;
-1	Laptop	16GB RAM	Laptop de alta gama	120000	10	1	\N
-2	Camiseta	100% Algodón	Camiseta blanca básica	20	50	2	\N
-3	Audífonos	Bluetooth	Audífonos inalámbricos	50	30	3	\N
-4	Pantalones	Jeans	Pantalones de mezclilla	40	25	2	\N
-\.
-
-
-COPY public."tienda" ("id", "nombre", "redes", "celular", "direccion") FROM stdin;
-2	Fashion Hub	@fashionhub	9876543	Avenida 456, Ciudad B
-1	Tech Store	@techstore	123456	Calle 123, Ciudad A'
-\.
-
-
 ALTER TABLE ONLY public."categoria"
     ADD CONSTRAINT "categoria_pkey" PRIMARY KEY ("id_categoria");
 
@@ -148,3 +115,35 @@ ALTER TABLE ONLY public."producto"
 
 ALTER TABLE ONLY public."categoria"
     ADD CONSTRAINT "id_tienda" FOREIGN KEY ("id_tienda") REFERENCES public."tienda"("id") NOT VALID;
+
+
+COPY public."categoria" ("id_categoria", "nombre", "id_tienda") FROM stdin;
+1	Electronica	1
+2	Ropa	2
+3	Accesorios	2
+\.
+
+
+COPY public."cliente" ("cc", "nombre", "apellido") FROM stdin;
+101	Carlos	Pérez
+102	Ana	García
+103	Luis	Martínez
+\.
+
+
+COPY public."comentario" (id, "coment", "cc_cliente") FROM stdin;
+\.
+
+
+COPY public."producto" ("id", "nombre", "característica", "descripción ", "precio", "stock", "id_categoria", "id_comentario") FROM stdin;
+1	Laptop	16GB RAM	Laptop de alta gama	120000	10	1	\N
+2	Camiseta	100% Algodón	Camiseta blanca básica	20	50	2	\N
+3	Audífonos	Bluetooth	Audífonos inalámbricos	50	30	3	\N
+4	Pantalones	Jeans	Pantalones de mezclilla	40	25	2	\N
+\.
+
+
+COPY public."tienda" ("id", "nombre", "redes", "celular", "direccion") FROM stdin;
+2	Fashion Hub	@fashionhub	9876543	Avenida 456, Ciudad B
+1	Tech Store	@techstore	123456	Calle 123, Ciudad A'
+\.
