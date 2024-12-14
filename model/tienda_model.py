@@ -3,8 +3,8 @@ from typing import Optional, List
 
 class Tienda(SQLModel, table=True):
     __tablename__ = "tienda"
-    Id: int = Field(primary_key=True)
-    Nombre: str
-    Redes: str
-    Celular: str
-    Direccion: str
+    id: int = Field(primary_key=True)
+    nombre: str
+    redes: str
+    celular: str
+    direccion: str

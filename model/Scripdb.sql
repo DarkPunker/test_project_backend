@@ -28,12 +28,8 @@ ALTER TABLE public."comentario" OWNER TO postgres;
 CREATE TABLE public."producto" (
     "id" integer NOT NULL,
     "nombre" text NOT NULL,
-    "característica" text,
-    "descripción " text,
-    "precio" integer,
-    "stock" integer,
     "id_categoria" integer,
-    "id_comentario" integer
+    
 );
 
 
@@ -78,6 +74,12 @@ ALTER TABLE ONLY public."categoria"
 ALTER TABLE ONLY public."librerias"
     ADD CONSTRAINT "librerias_pkey" PRIMARY KEY ("id");
 
+    ALTER TABLE ONLY public."tienda_producto"
+    ADD CONSTRAINT "fk_tienda" FOREIGN KEY ("id_tienda") REFERENCES public."tienda"("id");
+
+ALTER TABLE ONLY public."tienda_producto"
+    ADD CONSTRAINT "fk_producto" FOREIGN KEY ("id_producto") REFERENCES public."producto"("id");
+
 
 ALTER TABLE ONLY public."campos_de_formularios"
     ADD CONSTRAINT "campos_de_formularios_pkey" PRIMARY KEY ("id");
@@ -87,7 +89,7 @@ ALTER TABLE ONLY public."cliente"
     ADD CONSTRAINT "cliente_pkey" PRIMARY KEY ("cc");
 
 ALTER TABLE ONLY public."comentario"
-    ADD CONSTRAINT "comentario_pkey" PRIMARY KEY (id);
+    ADD CONSTRAINT "comentario_pkey" PRIMARY KEY ("id");
 
 ALTER TABLE ONLY public."producto"
     ADD CONSTRAINT "producto_pkey" PRIMARY KEY ("id");
@@ -103,6 +105,10 @@ CREATE INDEX "fki_id_categoria" ON public."producto" USING btree ("id_categoria"
 CREATE INDEX "fki_id_comentario" ON public."producto" USING btree ("id_comentario");
 
 CREATE INDEX "fki_id_tienda" ON public."categoria" USING btree ("id_tienda");
+
+CREATE INDEX "idx_tienda_producto_tienda" ON public."tienda_producto" USING btree ("id_tienda");
+
+CREATE INDEX "idx_tienda_producto_producto" ON public."tienda_producto" USING btree ("id_producto");
 
 ALTER TABLE ONLY public."comentario"
     ADD CONSTRAINT "cc_cliente" FOREIGN KEY ("cc_cliente") REFERENCES public."cliente"("cc") NOT VALID;

@@ -3,6 +3,6 @@ from typing import Optional, List
 
 class Categoria(SQLModel, table=True):
     __tablename__ = "categoria"
-    ID_Categoria: int = Field(primary_key=True)
-    Nombre: str
-    ID_Tienda: int = Field(foreign_key="tienda.Id")
+    id_categoria: int = Field(primary_key=True)
+    nombre: str
+    id_tienda: int = Field(foreign_key="tienda.Id")
