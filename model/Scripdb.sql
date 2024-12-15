@@ -1,5 +1,7 @@
+CREATE SEQUENCE "inc_id_categoria";
+
 CREATE TABLE public."categoria" (
-    "id_categoria" integer NOT NULL,
+    "id" integer PRIMARY KEY DEFAULT nextval('inc_id_categoria'),
     "nombre" text NOT NULL,
     "id_tienda" integer
 );
@@ -10,44 +12,59 @@ ALTER TABLE public."categoria" OWNER TO postgres;
 CREATE TABLE public."cliente" (
     "cc" integer NOT NULL,
     "nombre" text NOT NULL,
-    "apellido" text NOT NULL
+    "apellido" text NOT NULL,
+    "direccion" text,
+    "lat" text,
+    "long" text,
+    "id_usuario" integer NOT NULL
 );
 
 
 ALTER TABLE public."cliente" OWNER TO postgres;
 
-CREATE TABLE public."comentario" (
-    "id" integer NOT NULL,
-    "coment" text,
-    "cc_cliente" integer
+CREATE SEQUENCE "inc_id_orden_compra";
+
+CREATE TABLE public."orden_compra" (
+    "id" integer PRIMARY KEY DEFAULT nextval('inc_id_orden_compra'),
+    "comentario" text,
+    "cantidad" numeric,
+    "calificacion" numeric,
+    "estado" integer,
+    "cc_cliente" integer,
+    "id_tienda_producto" integer
 );
 
 
-ALTER TABLE public."comentario" OWNER TO postgres;
+ALTER TABLE public."orden_compra" OWNER TO postgres;
 
+CREATE SEQUENCE "inc_id_producto";
 CREATE TABLE public."producto" (
-    "id" integer NOT NULL,
+    "id" integer PRIMARY KEY DEFAULT nextval('inc_id_producto'),
     "nombre" text NOT NULL,
-    "id_categoria" integer,
-    
+    "unidad_medida" text,
+    "id_categoria" integer
 );
 
 
 ALTER TABLE public."producto" OWNER TO postgres;
 
+CREATE SEQUENCE "inc_id_tienda";
 CREATE TABLE public."tienda" (
-    "id" integer NOT NULL,
+    "id" integer PRIMARY KEY DEFAULT nextval('inc_id_tienda'),
     "nombre" text NOT NULL,
     "redes" text,
     "celular" integer,
-    "direccion" text
+    "direccion" text,
+    "lat" text,
+    "long" text,
+    "id_usuario" integer NOT NULL
 );
 
 
 ALTER TABLE public."tienda" OWNER TO postgres;
 
 CREATE TABLE public."campos_de_formularios" (
-    "id" integer ,
+    "id" integer,
     "nombre" text,
     "tipo" text ,
     "formato" text,
@@ -68,67 +85,69 @@ CREATE TABLE public."librerias" (
  
 ALTER TABLE public."librerias" OWNER TO postgres;
 
+CREATE SEQUENCE "inc_id_tienda_producto";
+
 CREATE TABLE public."tienda_producto" (
-    "id" integer, 
+    "id" integer PRIMARY KEY DEFAULT nextval('inc_id_tienda_producto'),
     "precio" integer,
-    "calificacion" integer,
-    "stock" integer,
+    "calificacion" numeric,
+    "stock" numeric,
     "caracteristicas" text,
     "descripcion" text,
     "id_tienda" integer NOT NULL,
-    "id_producto" integer NOT NULL,
-    "id_comentario" integer,
-    PRIMARY KEY ("id_tienda", "id_producto")
+    "id_producto" integer NOT NULL
 );
 
 ALTER TABLE public."tienda_producto" OWNER TO postgres;
 
 
 CREATE TABLE public."usuario" (
-    "id_usuario" integer NOT NULL,
+    "id" integer NOT NULL,
     "email" text NOT NULL,
     "contrasena" text NOT NULL
 );
 
 ALTER TABLE public."usuario" OWNER TO postgres;
 
-ALTER TABLE ONLY public."categoria"
-    ADD CONSTRAINT "categoria_pkey" PRIMARY KEY ("id_categoria");
 ALTER TABLE ONLY public."usuario"
-    ADD CONSTRAINT "usuario_pkey" PRIMARY KEY ("id_usuario");
-
-ALTER TABLE ONLY public."librerias"
-    ADD CONSTRAINT "librerias_pkey" PRIMARY KEY ("id");
-
-    ALTER TABLE ONLY public."tienda_producto"
-    ADD CONSTRAINT "fk_tienda" FOREIGN KEY ("id_tienda") REFERENCES public."tienda"("id");
-
-ALTER TABLE ONLY public."tienda_producto"
-    ADD CONSTRAINT "fk_producto" FOREIGN KEY ("id_producto") REFERENCES public."producto"("id");
-
+    ADD CONSTRAINT "usuario_pkey" PRIMARY KEY ("id");
 
 ALTER TABLE ONLY public."campos_de_formularios"
     ADD CONSTRAINT "campos_de_formularios_pkey" PRIMARY KEY ("id");
+
+ALTER TABLE ONLY public."librerias"
+    ADD CONSTRAINT "librerias_pkey" PRIMARY KEY ("id");
 
 
 ALTER TABLE ONLY public."cliente"
     ADD CONSTRAINT "cliente_pkey" PRIMARY KEY ("cc");
 
-ALTER TABLE ONLY public."comentario"
-    ADD CONSTRAINT "comentario_pkey" PRIMARY KEY ("id");
+ALTER TABLE ONLY public."tienda"
+    ADD CONSTRAINT "fk_usuario" FOREIGN KEY ("id_usuario") REFERENCES public."usuario"("id");
+ALTER TABLE ONLY public."tienda_producto"
+    ADD CONSTRAINT "fk_tienda" FOREIGN KEY ("id_tienda") REFERENCES public."tienda"("id");
+
+ALTER TABLE ONLY public."tienda_producto"
+    ADD CONSTRAINT "fk_producto" FOREIGN KEY ("id_producto") REFERENCES public."producto"("id");
+
+ALTER TABLE ONLY public."orden_compra"
+    ADD CONSTRAINT "fk_cliente" FOREIGN KEY ("cc_cliente") REFERENCES public."cliente"("cc") NOT VALID;
+ALTER TABLE ONLY public."orden_compra"
+    ADD CONSTRAINT "fk_tienda_producto" FOREIGN KEY ("id_tienda_producto") REFERENCES public."tienda_producto"("id") NOT VALID;
 
 ALTER TABLE ONLY public."producto"
-    ADD CONSTRAINT "producto_pkey" PRIMARY KEY ("id");
+    ADD CONSTRAINT "fk_categoria" FOREIGN KEY ("id_categoria") REFERENCES public."categoria"("id") NOT VALID;
 
-ALTER TABLE ONLY public."tienda"
-    ADD CONSTRAINT "tienda_pkey" PRIMARY KEY ("id");
+ALTER TABLE ONLY public."categoria"
+    ADD CONSTRAINT "fk_tienda" FOREIGN KEY ("id_tienda") REFERENCES public."tienda"("id") NOT VALID;
+
+ALTER TABLE ONLY public."cliente"
+    ADD CONSTRAINT "fk_usuario" FOREIGN KEY ("id_usuario") REFERENCES public."usuario"("id") NOT VALID;
 
 
-CREATE INDEX "fki_cc_cliente" ON public."comentario" USING btree ("cc_cliente");
+CREATE INDEX "fki_cc_cliente" ON public."orden_compra" USING btree ("cc_cliente");
 
 CREATE INDEX "fki_id_categoria" ON public."producto" USING btree ("id_categoria");
-
-CREATE INDEX "fki_id_comentario" ON public."producto" USING btree ("id_comentario");
 
 CREATE INDEX "fki_id_tienda" ON public."categoria" USING btree ("id_tienda");
 
@@ -136,29 +155,6 @@ CREATE INDEX "idx_tienda_producto_tienda" ON public."tienda_producto" USING btre
 
 CREATE INDEX "idx_tienda_producto_producto" ON public."tienda_producto" USING btree ("id_producto");
 
-ALTER TABLE ONLY public."comentario"
-    ADD CONSTRAINT "cc_cliente" FOREIGN KEY ("cc_cliente") REFERENCES public."cliente"("cc") NOT VALID;
-
-ALTER TABLE ONLY public."producto"
-    ADD CONSTRAINT "id_categoria" FOREIGN KEY ("id_categoria") REFERENCES public."categoria"("id_categoria") NOT VALID;
-
-ALTER TABLE ONLY public."producto"
-    ADD CONSTRAINT "id_comentario" FOREIGN KEY ("id_comentario") REFERENCES public."comentario"(id) NOT VALID;
-
-ALTER TABLE ONLY public."categoria"
-    ADD CONSTRAINT "id_tienda" FOREIGN KEY ("id_tienda") REFERENCES public."tienda"("id") NOT VALID;
-
-ALTER TABLE ONLY public."comentario"
-    VALIDATE CONSTRAINT "cc_cliente";
-
-ALTER TABLE ONLY public."producto"
-    VALIDATE CONSTRAINT "id_categoria";
-
-ALTER TABLE ONLY public."producto"
-    VALIDATE CONSTRAINT "id_comentario";
-
-ALTER TABLE ONLY public."categoria"
-    VALIDATE CONSTRAINT "id_tienda";
 
 INSERT INTO public.usuario (id_usuario,email,contrasena) VALUES
 	 (1,'ad132','12345');
