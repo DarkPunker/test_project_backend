@@ -85,64 +85,18 @@ CREATE TABLE public."tienda_producto" (
 ALTER TABLE public."tienda_producto" OWNER TO postgres;
 
 
+CREATE TABLE public."usuario" (
+    "id_usuario" integer NOT NULL,
+    "email" text NOT NULL,
+    "contrasena" text NOT NULL
+);
 
-COPY public."cliente" ("cc", "nombre", "apellido") FROM stdin;
-201	Juana	Pérez
-202	Carlos	Mendoza
-203	Luisa	Gómez
-\.
-COPY public."comentario" (id, "coment", "cc_cliente") FROM stdin;
-1   "El queso es muy fresco y delicioso."   201
-2   "Los plátanos están en excelente estado."   202
-3   "Los huevos son de excelente calidad."   203
-\.
-
-COPY public."tienda" ("id", "nombre", "redes", "celular", "direccion") FROM stdin;
-1	Delicias de la Sierra	@delicias_sierra	5551234	Aldea Alta
-2	Granja Los Fresnos	@granjalosfresnos	5554321	Finca 23
-3	Granja Los Fresnos	@granjalosfresnos	5554321	Finca 23
-\.
-
-
-COPY public."categoria" ("id_categoria", "nombre", "id_tienda") FROM stdin;
-1	Lácteos	3
-2	Frutas	3
-3	Huevos	3
-\.
-
-
-COPY public."producto" ("id", "nombre", "caracteristica", "descripcion ", "precio", "stock", "id_categoria", "id_comentario") FROM stdin;
-1	Queso	Fresco	Queso artesanal producido localmente	15	50	1	1
-2	Plátano	Orgánico	Plátanos cosechados sin químicos	5	100	2	2
-3	Huevos	Gallinas libres	Huevos frescos de granja	10	80	3	3
-\.
-
-
-
-COPY public."tienda_producto" ("id", "precio", "stock", "caracteristica", "id_tienda", "id_producto", "id_comentario", "calificacion", "descripcion")
-FROM stdin;
-1   1500    100   "Orgánico, artesanal"          1   1   10    5   "Queso fresco de alta calidad"
-2   500     200   "Cultivado sin pesticidas"     1   2   11    4   "Plátanos orgánicos cultivados localmente"
-3   1000    80    "Rico en omega-3"              1   3   12    5   "Huevos frescos de gallinas libres"
-\.
-
-COPY public."campos_de_formularios" ("id", "nombre", "tipo", "formato", "libreria", "nombre_letrero", "isEnable") FROM stdin;
-1   "Cantidad"  "Número"  "Numérico"    "UI/UX"   "Ingrese la cantidad"   1
-2   "Producto"  "Texto"   "Alfanumérico" "UI/UX"   "Ingrese el nombre del producto"   1
-\.
-
-COPY public."librerias" ("id", "key", "valor", "tp_libreria") FROM stdin;
-1   201   "Queso fresco artesanal"   "Agro"
-2   202   "Plátanos orgánicos"       "Agro"
-3   203   "Huevos de gallinas libres" "Agro"
-\.
-
-
-
-
+ALTER TABLE public."usuario" OWNER TO postgres;
 
 ALTER TABLE ONLY public."categoria"
     ADD CONSTRAINT "categoria_pkey" PRIMARY KEY ("id_categoria");
+ALTER TABLE ONLY public."usuario"
+    ADD CONSTRAINT "usuario_pkey" PRIMARY KEY ("id_usuario");
 
 ALTER TABLE ONLY public."librerias"
     ADD CONSTRAINT "librerias_pkey" PRIMARY KEY ("id");
@@ -206,3 +160,39 @@ ALTER TABLE ONLY public."producto"
 
 ALTER TABLE ONLY public."categoria"
     VALIDATE CONSTRAINT "id_tienda";
+
+INSERT INTO public.usuario (id_usuario,email,contrasena) VALUES
+	 (1,'ad132','12345');
+
+INSERT INTO public.tienda (id,nombre,redes,celular,direccion) VALUES
+	 (3,'Campesinos Unidos','@campesinosunidos',5556789,'"Calle 789, Pueblo Rural"'),
+	 (1,'agro','@algo',321400211,'villa del rey');
+
+INSERT INTO public.cliente (cc,nombre,apellido) VALUES
+	 (201,'Juana','Perez'),
+	 (202,'Carlos','Mendoza'),
+	 (203,'Luisa','G¢mez'),
+	 (123,'carlos','villegas');
+
+INSERT INTO public.comentario (id,coment,cc_cliente) VALUES
+	 (1,'"El queso es muy fresco y delicioso."',201),
+	 (2,'"Los platanos eston en excelente estado."',202),
+	 (3,'"Los huevos son de excelente calidad."',203);
+
+INSERT INTO public.categoria (id_categoria,nombre,id_tienda) VALUES
+	 (1,'Lacteos',3),
+	 (2,'Frutas',3),
+	 (3,'Huevos',3);
+
+
+-- TRUNCATE TABLE
+--  cliente,
+--  comentario,
+--  categoria,
+--  producto,
+--  tienda,
+--  campos_de_formularios,
+--  librerias,
+--  tienda_producto,
+--  usuario
+-- CASCADE;
