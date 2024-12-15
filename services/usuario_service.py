@@ -4,8 +4,8 @@ from sqlmodel import Session  # Importa Session
 
 _usuario_repository = Usuario_repository()
 
-def get_usuario(session: Session):
+def get_tienda(session: Session):
     return _usuario_repository.get_usuario(session)
 
-def create_usuario(session: Session, tienda: Usuario):
-    return _usuario_repository.create_usuario(session, Usuario)
+def create_usuario(session, usuario_data):
+    return _usuario_repository.create_usuario(session, usuario_data)

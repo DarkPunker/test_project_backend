@@ -9,7 +9,7 @@ class Usuario_repository:
         return session.exec(select(Usuario)).all()
 
     def create_usuario(self, session: Session, usuario: Usuario):
-        session.add(usuario)  
-        session.commit()   
-        session.refresh(usuario)  
-        return usuario  
+        session.add(usuario)  # Agregar la tienda a la sesión
+        session.commit()     # Confirmar la transacción
+        session.refresh(usuario)  # Refrescar los datos de la tienda (si es necesario)
+        return usuario  # Retornar el objeto tienda persistido
