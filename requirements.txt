@@ -8,3 +8,5 @@ python-dotenv
 pydantic
 sqlmodel
 gunicorn
+pyjwt 
+passlib

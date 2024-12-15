@@ -1,6 +1,7 @@
 # database.py
 from sqlmodel import create_engine, Session
 from os import getenv
+from contextlib import contextmanager
 
 DB_URL = getenv("DB_URL", '')
 
@@ -12,6 +13,10 @@ engine = create_engine(
     pool_timeout=60
 )
 
-def get_session() -> Session:
-    """Retorna una nueva sesión para ser utilizada en funciones de consulta/operación."""
-    return Session(engine)
+@contextmanager
+def get_session():
+    session = Session(engine)
+    try:
+        yield session
+    finally:
+        session.close()

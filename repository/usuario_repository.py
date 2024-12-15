@@ -1,15 +1,11 @@
-from sqlmodel import Session, select
+from sqlmodel import select
 from model.usuario_model import Usuario
+from model.database import get_session
 
 class Usuario_repository:
     def __init__(self):
         pass
 
-    def get_usuario(self, session: Session):
-        return session.exec(select(Usuario)).all()
-
-    def create_usuario(self, session: Session, usuario: Usuario):
-        session.add(usuario)  # Agregar la tienda a la sesión
-        session.commit()     # Confirmar la transacción
-        session.refresh(usuario)  # Refrescar los datos de la tienda (si es necesario)
-        return usuario  # Retornar el objeto tienda persistido
+    def get_usuario(self, email: str, password: str):
+        with get_session() as session:
+            return session.exec(select(Usuario).filter(Usuario.email == email, Usuario.contrasena == password)).first()
