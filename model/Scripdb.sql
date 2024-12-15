@@ -68,8 +68,34 @@ CREATE TABLE public."librerias" (
  
 ALTER TABLE public."librerias" OWNER TO postgres;
 
+CREATE TABLE public."tienda_producto" (
+    "id" integer, 
+    "precio" integer,
+    "calificacion" integer,
+    "stock" integer,
+    "caracteristicas" text,
+    "descripcion" text,
+    "id_tienda" integer NOT NULL,
+    "id_producto" integer NOT NULL,
+    "id_comentario" integer,
+    PRIMARY KEY ("id_tienda", "id_producto")
+);
+
+ALTER TABLE public."tienda_producto" OWNER TO postgres;
+
+
+CREATE TABLE public."usuario" (
+    "id_usuario" integer NOT NULL,
+    "email" text NOT NULL,
+    "contrasena" text NOT NULL
+);
+
+ALTER TABLE public."usuario" OWNER TO postgres;
+
 ALTER TABLE ONLY public."categoria"
     ADD CONSTRAINT "categoria_pkey" PRIMARY KEY ("id_categoria");
+ALTER TABLE ONLY public."usuario"
+    ADD CONSTRAINT "usuario_pkey" PRIMARY KEY ("id_usuario");
 
 ALTER TABLE ONLY public."librerias"
     ADD CONSTRAINT "librerias_pkey" PRIMARY KEY ("id");
@@ -122,34 +148,50 @@ ALTER TABLE ONLY public."producto"
 ALTER TABLE ONLY public."categoria"
     ADD CONSTRAINT "id_tienda" FOREIGN KEY ("id_tienda") REFERENCES public."tienda"("id") NOT VALID;
 
+ALTER TABLE ONLY public."comentario"
+    VALIDATE CONSTRAINT "cc_cliente";
 
-COPY public."categoria" ("id_categoria", "nombre", "id_tienda") FROM stdin;
-1	Electronica	1
-2	Ropa	2
-3	Accesorios	2
-\.
+ALTER TABLE ONLY public."producto"
+    VALIDATE CONSTRAINT "id_categoria";
+
+ALTER TABLE ONLY public."producto"
+    VALIDATE CONSTRAINT "id_comentario";
+
+ALTER TABLE ONLY public."categoria"
+    VALIDATE CONSTRAINT "id_tienda";
+
+INSERT INTO public.usuario (id_usuario,email,contrasena) VALUES
+	 (1,'ad132','12345');
+
+INSERT INTO public.tienda (id,nombre,redes,celular,direccion) VALUES
+	 (3,'Campesinos Unidos','@campesinosunidos',5556789,'"Calle 789, Pueblo Rural"'),
+	 (1,'agro','@algo',321400211,'villa del rey');
+
+INSERT INTO public.cliente (cc,nombre,apellido) VALUES
+	 (201,'Juana','Perez'),
+	 (202,'Carlos','Mendoza'),
+	 (203,'Luisa','G¢mez'),
+	 (123,'carlos','villegas');
+
+INSERT INTO public.comentario (id,coment,cc_cliente) VALUES
+	 (1,'"El queso es muy fresco y delicioso."',201),
+	 (2,'"Los platanos eston en excelente estado."',202),
+	 (3,'"Los huevos son de excelente calidad."',203);
+
+INSERT INTO public.categoria (id_categoria,nombre,id_tienda) VALUES
+	 (1,'Lacteos',3),
+	 (2,'Frutas',3),
+	 (3,'Huevos',3);
 
 
-COPY public."cliente" ("cc", "nombre", "apellido") FROM stdin;
-101	Carlos	Pérez
-102	Ana	García
-103	Luis	Martínez
-\.
-
-
-COPY public."comentario" (id, "coment", "cc_cliente") FROM stdin;
-\.
-
-
-COPY public."producto" ("id", "nombre", "característica", "descripción ", "precio", "stock", "id_categoria", "id_comentario") FROM stdin;
-1	Laptop	16GB RAM	Laptop de alta gama	120000	10	1	\N
-2	Camiseta	100% Algodón	Camiseta blanca básica	20	50	2	\N
-3	Audífonos	Bluetooth	Audífonos inalámbricos	50	30	3	\N
-4	Pantalones	Jeans	Pantalones de mezclilla	40	25	2	\N
-\.
-
-
-COPY public."tienda" ("id", "nombre", "redes", "celular", "direccion") FROM stdin;
-2	Fashion Hub	@fashionhub	9876543	Avenida 456, Ciudad B
-1	Tech Store	@techstore	123456	Calle 123, Ciudad A'
-\.
+-- TRUNCATE TABLE
+--  cliente,
+--  comentario,
+--  categoria,
+--  producto,
+--  tienda,
+--  campos_de_formularios,
+--  librerias,
+--  tienda_producto,
+--  usuario
+-- CASCADE;
