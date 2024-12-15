@@ -9,3 +9,7 @@ class Usuario_repository:
     def get_usuario(self, email: str, password: str):
         with get_session() as session:
             return session.exec(select(Usuario).filter(Usuario.email == email, Usuario.contrasena == password)).first()
+    
+    def get_usuario_by_email(self, email: str):
+        with get_session() as session:
+            return session.exec(select(Usuario).filter(Usuario.email == email)).first()

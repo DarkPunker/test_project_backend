@@ -15,8 +15,10 @@ class Tienda_repository:
             return session.exec(select(Tienda).filter(Tienda.id_usuario == id)).first()
 
 
-    # def create_tienda(self, session: Session, tienda: Tienda):
-    #     session.add(tienda)  # Agregar la tienda a la sesión
-    #     session.commit()     # Confirmar la transacción
-    #     session.refresh(tienda)  # Refrescar los datos de la tienda (si es necesario)
-    #     return tienda  # Retornar el objeto tienda persistido
+    def create_tienda(self, tienda: Tienda):
+        print(tienda)
+        with get_session() as session:  
+            session.add(tienda)      
+            session.commit()        
+            session.refresh(tienda)   
+            return tienda   

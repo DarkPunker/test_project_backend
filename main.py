@@ -1,7 +1,6 @@
-# main.py
+
 import config
 from fastapi import FastAPI
-
 from router import auth_router, producto_router, tienda_router
 from router import librerias_router, categoria_router,  tienda_producto_router
 

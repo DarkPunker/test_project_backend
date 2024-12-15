@@ -1,15 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlmodel import Session
-from model.tienda_model import Tienda
+from schemas.error_response import error_responses
+from schemas.tienda_schema import TiendaReponse, TiendaRequest
 from services.tienda_service import get_tienda, create_tienda
-from model.database import get_session
+
 
 router = APIRouter(prefix="/tiendas", tags=["Tiendas"])
 
-@router.get("/")
-def read_tienda(session: Session = Depends(get_session)):  # Pasar sesión
-    return get_tienda(session)
+@router.get("/all_tiendas", responses=error_responses, response_model=list[TiendaReponse], summary='create_tienda')
+def read_tienda(): 
+    return get_tienda()
 
-@router.post("/")
-def add_tienda(tienda: Tienda, session: Session = Depends(get_session)):  # Pasar sesión
-    return create_tienda(session, tienda)
+@router.post("/create_tienda", responses=error_responses, response_model=TiendaReponse, summary='create_tienda')
+async def agregar_tienda(data_tienda: TiendaRequest):
+    return create_tienda(data_tienda)

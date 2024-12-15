@@ -51,6 +51,5 @@ Thumbs.db
 
 venv/
 api.http
-.env
 *.pyc
 __pycache__/
