@@ -13,3 +13,10 @@ class TokenUsuarioResponse(BaseModel):
     email: str
     cliente: ClienteSchema
     tienda: Optional[TiendaSchema]
+
+    class Config:
+        from_attributes = True
+
+class UsuarioSchema(BaseModel):
+    email: str
+    contrasena: str

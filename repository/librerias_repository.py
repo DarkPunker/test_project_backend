@@ -10,11 +10,11 @@ class campos_de_formularios_repository():
         with get_session() as session:
             return session.exec(select(CamposDeFormularios)).all()
 
-    def create_campos_de_formularios(session: Session, campos_de_formularios: CamposDeFormularios):
-        session.add(campos_de_formularios)
-        session.commit()
-        session.refresh(campos_de_formularios)
-        return campos_de_formularios
+    # def create_campos_de_formularios(session: Session, campos_de_formularios: CamposDeFormularios):
+    #     session.add(campos_de_formularios)
+    #     session.commit()
+    #     session.refresh(campos_de_formularios)
+    #     return campos_de_formularios
     
     
 class librerias_repository:
@@ -26,8 +26,8 @@ class librerias_repository:
         with get_session() as session:
             return session.exec(select(Librerias)).all()
 
-    def create_librerias(self, session: Session, librerias: Librerias):
-        session.add(librerias)
-        session.commit()
-        session.refresh(librerias)
-        return librerias
+    # def create_librerias(self, session: Session, librerias: Librerias):
+    #     session.add(librerias)
+    #     session.commit()
+    #     session.refresh(librerias)
+    #     return librerias

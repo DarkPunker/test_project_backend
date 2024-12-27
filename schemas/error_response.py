@@ -10,7 +10,7 @@ error_responses ={
         "model":HTTPErrorSchema,
         "description": "desautorizado"
     },
-    401:{
+    404:{
         "model":HTTPErrorSchema,
         "description": "Not Found"
     }

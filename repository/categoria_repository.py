@@ -9,8 +9,8 @@ class categoria_repository():
         with get_session() as session:
             return session.exec(select(Categoria)).all()
 
-    def create_categoria(session: Session, categoria: Categoria):
-        session.add(categoria)
-        session.commit()
-        session.refresh(categoria)
-        return categoria
+    # def create_categoria(session: Session, categoria: Categoria):
+    #     session.add(categoria)
+    #     session.commit()
+    #     session.refresh(categoria)
+    #     return categoria

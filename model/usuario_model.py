@@ -3,7 +3,7 @@ from typing import Optional, List
 
 class Usuario(SQLModel, table=True):
     __tablename__ = "usuario"
-    id: int = Field(primary_key=True)
+    id: Optional[int] = Field(primary_key=True)
     email: str
     contrasena: str
 

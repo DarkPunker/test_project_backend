@@ -16,10 +16,4 @@ class Cliente_repository:
             session.commit()
             session.refresh(cliente)
             return cliente
-        
-        
-    # def create_cliente(self, session: Session, cliente: Cliente):
-    #     session.add(cliente)  # Agregar el cliente a la sesión
-    #     session.commit()  # Confirmar la transacción
-    #     session.refresh(cliente)  # Refrescar el cliente con los valores más recientes
-    #     return cliente  # Retornar el cliente creado
+    

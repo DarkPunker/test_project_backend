@@ -4,7 +4,7 @@ from typing import Optional
 class TiendaProducto(SQLModel, table=True):
     __tablename__ = "tienda_producto"
 
-    id: int = Field(primary_key=True)
+    id: Optional[int] = Field(primary_key=True)
     precio: Optional[int]
     calificacion: Optional[float]
     stock: Optional[float]

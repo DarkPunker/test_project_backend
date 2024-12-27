@@ -10,8 +10,16 @@ class TiendaProductoRepository:
         with get_session() as session:
             return session.exec(select(TiendaProducto)).all()
 
-    def create_tienda_producto(self, session: Session, tienda_producto: TiendaProducto):
-        session.add(tienda_producto)
-        session.commit()
-        session.refresh(tienda_producto)
-        return tienda_producto
+    def create_tienda_producto(self, tienda_producto: TiendaProducto):
+        with get_session() as session:
+            session.add(tienda_producto)
+            session.commit()
+            session.refresh(tienda_producto)
+            return tienda_producto
+        
+    def edit_tienda_producto(self, tienda_producto: TiendaProducto):
+        with get_session() as session:
+            session.merge(tienda_producto)  
+            session.commit()      
+            session.refresh(tienda_producto)  
+            return tienda_producto

@@ -13,3 +13,10 @@ class Usuario_repository:
     def get_usuario_by_email(self, email: str):
         with get_session() as session:
             return session.exec(select(Usuario).filter(Usuario.email == email)).first()
+        
+    def create_usuario(self, user: Usuario):
+        with get_session() as session:
+            session.add(user)
+            session.commit()
+            session.refresh(user)
+            return user 
